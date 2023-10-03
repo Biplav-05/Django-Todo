@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.rawgit.com/icons8/titanic/master/dist/js/titanic.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/4.5.9/bodymovin.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <title>Todo's Home Pages</title>
+</head>
+
+<body>
+  <h1 class="mt-2 d-flex justify-content-center text-primary">Django Todo App</h1>
+  <div class="container border border-2 p-3 mt-2 bg-light d-flex justify-content-center">
+
+    <form action="{% url 'save' %}" method="POST">
+      {% csrf_token %}
+      <h3 class="d-flex justify-content-center lead text-muted">What do you want to do today ?</h3>
+      <div class="container d-flex flex-row">
+        {{form.text}}
+        <input type="submit" class="text-muted" value="Add">
+      </div>
+
+      <div class="form-text">
+        Your text must be 8-20 characters long, contain letters and numbers, and must not contain spaces,
+        special characters, or emoji.
+      </div>
+
+      <div class="container d-flex flex-row p-3 justify-content-center">
+        <div class="btn-group">
+          <a href="{% url 'deletecompleted' %}" class="link-dark text-decoration-none"><button type="button" class="me-3 btn btn-outline-danger">Delete Completed</button></a>
+          <a href="{% url 'deleteall' %}" class="link-dark text-decoration-none"><button type="button" class="me-3 btn btn-outline-danger">Delete All</button> </a>
+        </div>
+      </div>
+
+      <div class="container ">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Task</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          {% for t in todos %}
+          <tbody>
+            <tr>
+                <td>{{t.text}}</td>
+                {% if t.isComplete %}
+                <td><a href="{% url 'makepending' t.id %}" class="link-dark text-decoration-none">
+
+                  <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="40" height="30" viewBox="0 0 48 48">
+                    <path fill="#4caf50" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path><path fill="#ccff90" d="M34.602,14.602L21,28.199l-5.602-5.598l-2.797,2.797L21,33.801l16.398-16.402L34.602,14.602z"></path>
+                    </svg>
+
+                </a></td>
+                {% else %}
+                <td><a href="{% url 'makecomplete' t.id %}" class="link-info text-decoration-none">
+
+                  <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="40" height="30" viewBox="0 0 32 32">
+                    <path d="M 16 4 C 9.3844239 4 4 9.3844287 4 16 C 4 22.615571 9.3844239 28 16 28 C 22.615576 28 28 22.615571 28 16 C 28 9.3844287 22.615576 4 16 4 z M 16 6 C 21.534697 6 26 10.465307 26 16 C 26 21.534693 21.534697 26 16 26 C 10.465303 26 6 21.534693 6 16 C 6 10.465307 10.465303 6 16 6 z M 15 8 L 15 17 L 22 17 L 22 15 L 17 15 L 17 8 L 15 8 z"></path>
+                    </svg>
+                </a></td>
+                {% endif %}
+            </tr>
+          </tbody>
+          {% endfor %}
+        </table>
+      </div>
+    </form>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
