@@ -30,7 +30,7 @@ def save_data(request):
     #lets select the one entry only and try to modify the entry if form is going to post
     entry10 = Todo.objects.get(pk=25)
 
-    newTodoForm = NewTodoForm(request.POST,instance=entry10)
+    newTodoForm = NewTodoForm(request.POST)
 
     if newTodoForm.is_valid():
         newTodoForm.save()
