@@ -2,36 +2,41 @@ from django.shortcuts import render,redirect
 from .models import Todo
 from django.views.decorators.http import require_POST
 
-from .forms import TodoForm
+from .forms import TodoForm,NewTodoForm
 # Create your views here.
 
 def index(request):
-    # if request.method == 'POST':
-    #     todoForm = TodoForm(request.POST)
-    #     if todoForm.is_valid():
+    #form = TodoForm ()
 
-    #         #save the requested data in db
-    #         new_todo = Todo(text = request.POST['text'])
-    #         new_todo.save()
-    #         return redirect('IndexView')
-        
-    # else:
-    form = TodoForm ()
-
-    
     todos = Todo.objects.all().order_by('-id')
-    context = {'todos': todos, 'form':form}
+
+    #This is new todoform which is in forms
+    newTodoForm  = NewTodoForm()
+    
+    
+    context = {'todos': todos, 'form':newTodoForm}
     return render(request,'initial_app/index.html',context)
 
 @require_POST
 def save_data(request):
-    todoForm = TodoForm(request.POST)
-    if todoForm.is_valid():
+    # todoForm = TodoForm(request.POST)
+    # if todoForm.is_valid():
 
-         #save the requested data in db
-        new_todo = Todo(text = request.POST['text'])
-        new_todo.save()
+    #      #save the requested data in db
+    #     new_todo = Todo(text = request.POST['text'])
+    #     new_todo.save()
+    # return redirect('IndexView')
+
+    #lets select the one entry only and try to modify the entry if form is going to post
+    entry10 = Todo.objects.get(pk=25)
+
+    newTodoForm = NewTodoForm(request.POST,instance=entry10)
+
+    if newTodoForm.is_valid():
+        newTodoForm.save()
+
     return redirect('IndexView')
+
 
 def makeComplete(request,todo_id):
     pendingTodo = Todo.objects.get(pk=todo_id)
